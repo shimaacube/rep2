@@ -1,0 +1,148 @@
+ {% extends 'base.html' %}
+ {% load comments %}
+ {# {% load markup %} #}
+     
+     
+    {% block title %} Blog posts : {% endblock %}
+     
+    {% block content %}
+
+        <h1> Blog Archive :-  </h1>
+            <div class="content container">
+                <div class="row">
+                     <div class="col-md-8">
+                        {% for post in posts %}
+                            <div class="post">
+                                <h2>
+                                    {# <a href="{{post.get_absolute_url}}"> #}
+                                        {{post.title}}
+                                    </a>
+                                </h2>
+                                <p>{{post.description}}</p>
+                                <p>
+                                <div id="fb-root"></div>
+                                    <script>
+                                      window.fbAsyncInit = function() {
+                                      FB.init({
+                                        appId      : '139189172918513', // App ID
+                                        // channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+                                        status     : true, // check login status
+                                        cookie     : true, // enable cookies to allow the server to access the session
+                                        xfbml      : true  // parse XFBML
+                                      });
+                                    };
+                                    (function(d){
+                                      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                                      if (d.getElementById(id)) {return;}
+                                      js = d.createElement('script'); js.id = id; js.async = true;
+                                      js.src = "//connect.facebook.net/en_US/all.js";
+                                      ref.parentNode.insertBefore(js, ref);
+                                    }(document));
+                                    </script>
+                                    <div id="fb-root"></div>
+                                    <script>(function(d, s, id) {
+                                      var js, fjs = d.getElementsByTagName(s)[0];
+                                      if (d.getElementById(id)) return;
+                                      js = d.createElement(s); js.id = id;
+                                      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=872579779443200&version=v2.0";
+                                      fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));</script>
+                                    <div id="fb-root"></div>
+                                    <script>(function(d, s, id) {
+                                      var js, fjs = d.getElementsByTagName(s)[0];
+                                      if (d.getElementById(id)) return;
+                                      js = d.createElement(s); js.id = id;
+                                      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=872579779443200&version=v2.0";
+                                      fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));</script>
+                                        {# tweet #} 
+                                    <script type="text/javascript">
+                                    window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+                                    </script>
+                                        {# twitter follow #}
+                                    <script type="text/javascript">
+                                    window.twttr = (function (d, s, id) {
+                                      var t, js, fjs = d.getElementsByTagName(s)[0];
+                                      if (d.getElementById(id)) return;
+                                      js = d.createElement(s); js.id = id;
+                                      js.src= "https://platform.twitter.com/widgets.js";
+                                      fjs.parentNode.insertBefore(js, fjs);
+                                      return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+                                    }(document, "script", "twitter-wjs"));
+                                    </script>
+
+                                    Posted on
+                                    <time datetime="{{post.created|date:"c"}}">
+                                    {{post.created|date}}
+                                    </time>
+                                    {% if post.comment_set.all %}
+                                    {# <h2>Comments</h2>
+                                    <div class="comments">
+                                            {% for comment in post.comment_set.all %}
+                                                <span>
+                                                    <a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}
+                                                </span>
+                                                <p>
+                                                    {{ comment.text }}
+                                                </p>
+                                            {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    <br />
+
+                                  
+                                    <br> #}
+                                      {# {% get_free_comment_count for myblogapp.post post.id as comment_count %} #}
+                                      {# <a href="{{ post.get_absolute_url }}">{{ comment_count }} Comment{{ comment_count|pluralize}}</a> #}
+                                      {% get_comment_count for blog.post post.id as comment_count %}
+                                       <a href="{{ post.get_absolute_url }}#comments">
+                                         {{ comment_count}} 
+                                         Comment{{ comment_count|pluralize}}</a>
+                                       {% get_comment_list for blog.post post.id as comment_list %}
+                                      {% get_comment_count for blog.post post.id as comment_count %}
+                                      {% if comment_list %}
+                                        <h4>{{ comment_count }} Comment{{ comment_count|pluralize}}</h4>
+                                      {% endif %}
+                                      {% for comment in comment_list %}
+                                        <a href="#c{{ comment.id }}">#{{ forloop.counter }}</a>
+                                        <b>
+                                          {% if comment.url %}
+                                                <a href="{{ comment.url }}">{{ comment.name|escape }}</a>
+                                              {% else %}
+                                               {{ comment.name|escape }}
+                                             {% endif %}
+                                        </b> commented, 
+                                        on {{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}:
+                                          {# {{ comment.comment|markdown:"safe" }} #}
+                                      {% endfor %}
+                                      <br>
+                                      <h4>Post a comment</h4>
+                                      {% render_comment_form for post %}
+                                </p>
+                            </div>
+                            <div
+                               class="fb-comments" 
+                               data-href="{{ my_object.slug }}" 
+                               data-num-posts="5" 
+                               data-width="600"
+                               data-colorscheme="dark"></div>
+                            <div class="fb-share-button" data-href="{{ my_object.slug }}" data-layout="button_count"></div>
+                            <div class="fb-like" data-href="{{ my_object.slug }}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+                            <a class="twitter-share-button"
+                                  href="https://twitter.com/share">
+                                Tweet
+                            </a>
+                            <a class="twitter-follow-button"
+                              href="https://twitter.com/cendrllaNon"
+                              data-show-count="false"
+                              data-lang="en">
+                            Follow @cendrllaNon
+                            </a>
+                            
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+    {% endblock %}

@@ -1,0 +1,8 @@
+{% comment%}
+
+
+
+
+{% endcomment %}
+
+Your account activation details at {{ site }}

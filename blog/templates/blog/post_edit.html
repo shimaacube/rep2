@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load url from future %}
+{% load i18n %}
+<link href="css/froala_editor.min.css" rel="stylesheet" type="text/css" />
+<link href="css/froala_style.min.css" rel="stylesheet" type="text/css" />
+<link href="css/froala_content.min.css" rel="stylesheet" type="text/css" />
+{% block content %}
+	<h2>Hello {{ user.username }}</h2>
+    <h1>New post</h1>
+    <form method="POST" class="post-form">{% csrf_token %} {# #for secure #}
+        {{ form.as_p }}
+        <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+        {% load staticfiles %}
+        
+        
+        {% load staticfiles %}
+        <script src="{% static "js/froala_editor.min.js" %}" ></script>
+        <script src="{% static "js/froala_editor_ie8.min.js" %}"></script>
+        <textarea id="edit" name="content"></textarea>
+        <script>
+          $(function() {
+          $('#edit').editable({inlineMode: false})
+      	});
+        </script>
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+
+{% endblock %}
